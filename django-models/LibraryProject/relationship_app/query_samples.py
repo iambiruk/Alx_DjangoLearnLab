@@ -8,6 +8,7 @@ django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
 def query_all_books_by_author(author_name):
+    objects.filter(author=author)
     """Query all books by a specific author"""
     try:
         author = Author.objects.get(name=author_name)
@@ -53,4 +54,5 @@ if __name__ == "__main__":
     list_all_books_in_library("Central Library")
 
     print("\n3. Retrive the librarian for a library:")
+
     retrive_librarian_for_library("Central Library")
