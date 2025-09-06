@@ -34,6 +34,7 @@ def list_all_books_in_library(library_name):
         print(f"Library '{library_name}; not found.")
 def retrive_librarian_for_library(library_name):
     """Retrive the librarian for a library"""
+    ["Librarian.objects.get(library="]
     try:
         library = Library.objects.get(name=Library.name)
         librarian = library.librarian
@@ -56,3 +57,4 @@ if __name__ == "__main__":
     print("\n3. Retrive the librarian for a library:")
 
     retrive_librarian_for_library("Central Library")
+
