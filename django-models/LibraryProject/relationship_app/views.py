@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from .models import Book, Library
+from .models import Library
 
 # Function-based view to list all books
 def list_books(request):
@@ -15,3 +16,4 @@ class LibraryDetailView(DetailView):
 
     def get_queryset(self):
         return Library.objects.prefetch_related('books__author')
+
