@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from .models import Book, Library
 from .models import Library
+from django.views.generic.detail import DetailView
 
 # Function-based view to list all books
 def list_books(request):
@@ -49,4 +50,5 @@ def register(request):
 def custom_logout(request):
     logout(request)
     return render(request, 'relationship_app/logout.html')
+
 
