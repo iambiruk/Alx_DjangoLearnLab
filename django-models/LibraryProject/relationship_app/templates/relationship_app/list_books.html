@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Books</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px; margin: 5px 0; background-color: #f9f9f9; border-left: 4px solid #4CAF50; }
+        a { color: #4CAF50; text-decoration: none; margin-right: 15px; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>All Books</h1>
+    <ul>
+        {% for book in books %}
+        <li><strong>{{ book.title }}</strong> by {{ book.author.name }}</li>
+        {% empty %}
+        <li>No books available in the database.</li>
+        {% endfor %}
+    </ul>
+    
+    <br>
+    <a href="{% url 'relationship_app:library_list' %}">View All Libraries</a>
+    <a href="/admin/">Admin Panel</a>
+    <a href="/">Home</a>
+</body>
+</html>

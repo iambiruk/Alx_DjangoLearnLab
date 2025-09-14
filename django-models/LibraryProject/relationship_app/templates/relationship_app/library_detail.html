@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ library.name }} - Details</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        h2 { color: #4CAF50; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px; margin: 5px 0; background-color: #f9f9f9; border-left: 4px solid #2196F3; }
+        a { color: #4CAF50; text-decoration: none; margin-right: 15px; }
+        a:hover { text-decoration: underline; }
+        .info-box { background-color: #e7f3fe; padding: 15px; border-left: 4px solid #2196F3; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>{{ library.name }}</h1>
+    
+    <div class="info-box">
+        {% if library.librarian %}
+        <strong>Librarian:</strong> {{ library.librarian.name }}
+        {% else %}
+        <strong>Librarian:</strong> Not assigned
+        {% endif %}
+        <br>
+        <strong>Total Books:</strong> {{ library.books.count }}
+    </div>
+    
+    <h2>Books in this Library:</h2>
+    <ul>
+        {% for book in library.books.all %}
+        <li><strong>{{ book.title }}</strong> by {{ book.author.name }}</li>
+        {% empty %}
+        <li>No books available in this library.</li>
+        {% endfor %}
+    </ul>
+    
+    <br>
+    <a href="{% url 'relationship_app:list_books' %}">View All Books</a>
+    <a href="{% url 'relationship_app:library_list' %}">Back to Libraries</a>
+    <a href="/admin/">Admin Panel</a>
+    <a href="/">Home</a>
+</body>
+</html>
