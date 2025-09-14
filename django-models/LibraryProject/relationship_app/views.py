@@ -4,6 +4,7 @@ from django.views.generic.detail import DetailView
 from .models import Book, Library
 from .models import Library
 
+
 # Function-based view to list all books
 def list_books(request):
     books = Book.objects.all().select_related('author')
@@ -23,5 +24,6 @@ class LibraryListView(ListView):
     model = Library
     template_name = 'relationship_app/library_list.html'
     context_object_name = 'libraries'
+
 
 
