@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
+from django.views.generic.detail import DetailView
 from .models import Book, Library
 from .models import Library
 
@@ -22,4 +23,5 @@ class LibraryListView(ListView):
     model = Library
     template_name = 'relationship_app/library_list.html'
     context_object_name = 'libraries'
+
 
