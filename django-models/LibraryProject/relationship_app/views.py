@@ -2,11 +2,26 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from .models import Book, Library
-from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponseForbidden
+from .models import Book, Library, UserProfile
+
+# Utility functions for role checking
+def is_admin(user):
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.is_admin()
+
+def is_librarian(user):
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.is_librarian()
+
+def is_member(user):
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.is_member()
+
+def get_user_role(user):
+    if hasattr(user, 'profile'):
+        return user.profile.get_role_display()
+    return 'No Role'
 
 # Function-based view to list all books
 def list_books(request):
@@ -40,7 +55,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Welcome back, {username}!')
+                messages.success(request, f'Welcome back, {username}! Your role: {get_user_role(user)}')
                 next_url = request.GET.get('next', '/relationship/')
                 return redirect(next_url)
         else:
@@ -55,8 +70,9 @@ def register_view(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # Default role is 'member' as set in the model
             login(request, user)
-            messages.success(request, 'Registration successful! Welcome to our library system.')
+            messages.success(request, 'Registration successful! Welcome to our library system. Your role: Member')
             return redirect('relationship_app:list_books')
         else:
             messages.error(request, 'Please correct the errors below.')
@@ -74,4 +90,45 @@ def logout_view(request):
 # Protected home view
 @login_required(login_url='/relationship/login/')
 def home_view(request):
-    return render(request, 'relationship_app/home.html')
+    user_role = get_user_role(request.user)
+    return render(request, 'relationship_app/home.html', {'user_role': user_role})
+
+# Role-Based Views
+@login_required(login_url='/relationship/login/')
+@user_passes_test(is_admin, login_url='/relationship/access-denied/')
+def admin_view(request):
+    users = UserProfile.objects.all().select_related('user')
+    libraries = Library.objects.all()
+    return render(request, 'relationship_app/admin_view.html', {
+        'users': users,
+        'libraries': libraries,
+        'user_role': get_user_role(request.user)
+    })
+
+@login_required(login_url='/relationship/login/')
+@user_passes_test(is_librarian, login_url='/relationship/access-denied/')
+def librarian_view(request):
+    # Librarians can see books and manage their library
+    books = Book.objects.all().select_related('author')
+    libraries = Library.objects.all()
+    return render(request, 'relationship_app/librarian_view.html', {
+        'books': books,
+        'libraries': libraries,
+        'user_role': get_user_role(request.user)
+    })
+
+@login_required(login_url='/relationship/login/')
+@user_passes_test(is_member, login_url='/relationship/access-denied/')
+def member_view(request):
+    # Members can see available books and libraries
+    books = Book.objects.all().select_related('author')
+    libraries = Library.objects.all()
+    return render(request, 'relationship_app/member_view.html', {
+        'books': books,
+        'libraries': libraries,
+        'user_role': get_user_role(request.user)
+    })
+
+# Access denied view
+def access_denied_view(request):
+    return render(request, 'relationship_app/access_denied.html', status=403)
