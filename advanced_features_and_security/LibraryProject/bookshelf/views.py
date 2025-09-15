@@ -7,7 +7,9 @@ from django.utils.html import escape
 from .models import Book, Author
 from .forms import BookForm, AuthorForm
 from .forms import ExampleForm
-
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .forms import BookForm
 
 @login_required
 def book_search(request):
@@ -33,7 +35,29 @@ def book_search(request):
         'query': escape(query),  
     }
     return render(request, 'bookshelf/book_search.html', context)
-
+def form_example(request):
+    """
+    Example form view to demonstrate security features including:
+    - CSRF protection
+    - Form validation
+    - XSS prevention
+    - Input sanitization
+    """
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            # Security: Form validation prevents malformed data
+            book = form.save(commit=False)
+            book.created_by = request.user
+            book.save()
+            return render(request, 'bookshelf/form_example.html', {
+                'form': BookForm(),
+                'success_message': 'Book created successfully!'
+            })
+    else:
+        form = BookForm()
+    
+    return render(request, 'bookshelf/form_example.html', {'form': form})
 
 @login_required
 def book_api_search(request):
@@ -99,4 +123,5 @@ def book_create(request):
     })
 
 # Add similar security measures to all other views
+
 
