@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ action }} Book</title>
+    <!-- Security: CSP compliant inline styles only when necessary -->
+    <style>
+        .error { color: red; }
+        .form-group { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <h1>{{ action }} Book</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}  <!-- CSRF Protection -->
+        
+        <div class="form-group">
+            {{ form.title.label_tag }}
+            {{ form.title }}
+            {{ form.title.errors }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.author.label_tag }}
+            {{ form.author }}
+            {{ form.author.errors }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.published_date.label_tag }}
+            {{ form.published_date }}
+            {{ form.published_date.errors }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.isbn.label_tag }}
+            {{ form.isbn }}
+            {{ form.isbn.errors }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+        
+        <button type="submit">Save</button>
+        <a href="{% url 'book_list' %}">Cancel</a>
+    </form>
+</body>
+</html>
