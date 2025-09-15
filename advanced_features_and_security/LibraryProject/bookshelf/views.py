@@ -6,6 +6,7 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.utils.html import escape
 from .models import Book, Author
 from .forms import BookForm, AuthorForm
+from .forms import ExampleForm
 
 
 @login_required
@@ -98,3 +99,4 @@ def book_create(request):
     })
 
 # Add similar security measures to all other views
+
