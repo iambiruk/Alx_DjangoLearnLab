@@ -1,0 +1,10 @@
+<div style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px; text-align: center;">
+    {% if user.is_authenticated %}
+        Welcome, {{ user.username }}! 
+        <a href="{% url 'relationship_app:logout' %}" style="margin-left: 15px;">Logout</a>
+    {% else %}
+        <a href="{% url 'relationship_app:login' %}">Login</a>
+        <a href="{% url 'relationship_app:register' %}" style="margin-left: 15px;">Register</a>
+    {% endif %}
+    <a href="{% url 'relationship_app:home' %}" style="margin-left: 15px;">Home</a>
+</div>

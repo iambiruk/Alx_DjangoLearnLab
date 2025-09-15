@@ -1,0 +1,70 @@
+<!-- logout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout - Library System</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            background-color: #f5f5f5; 
+            text-align: center;
+        }
+        .logout-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { 
+            color: #333; 
+            margin-bottom: 30px;
+        }
+        .success-message {
+            color: #388e3c;
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+        .auth-links {
+            margin-top: 30px;
+        }
+        .auth-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .auth-links a:hover {
+            background-color: #45a049;
+        }
+        .auth-links a.secondary {
+            background-color: #2196F3;
+        }
+        .auth-links a.secondary:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="logout-container">
+        <h1>Logout Successful</h1>
+        
+        <div class="success-message">
+            You have been logged out successfully.
+        </div>
+        
+        <div class="auth-links">
+            <a href="{% url 'relationship_app:login' %}">Login Again</a>
+            <a href="{% url 'relationship_app:list_books' %}" class="secondary">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

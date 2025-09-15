@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Libraries</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 15px; margin: 10px 0; background-color: #f9f9f9; border-left: 4px solid #FF9800; }
+        a { color: #4CAF50; text-decoration: none; margin-right: 15px; }
+        a:hover { text-decoration: underline; }
+        .library-link { font-size: 1.2em; font-weight: bold; }
+        .stats { color: #666; font-size: 0.9em; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>All Libraries</h1>
+    <ul>
+        {% for library in libraries %}
+        <li>
+            <a href="{% url 'relationship_app:library_detail' library.pk %}" class="library-link">{{ library.name }}</a>
+            <div class="stats">
+                {% if library.librarian %}Librarian: {{ library.librarian.name }} | {% endif %}
+                Books: {{ library.books.count }}
+            </div>
+        </li>
+        {% empty %}
+        <li>No libraries available in the database.</li>
+        {% endfor %}
+    </ul>
+    
+    <br>
+    <a href="{% url 'relationship_app:list_books' %}">View All Books</a>
+    <a href="/admin/">Admin Panel</a>
+    <a href="/">Home</a>
+</body>
+</html>
