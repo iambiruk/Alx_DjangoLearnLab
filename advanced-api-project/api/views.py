@@ -1,16 +1,24 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, filters
+from django_filters.rest_framework import DjangFilterBackend
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 class BookListView(generics.ListAPIVIEW):
     """
-    ListView: Retrives all books.
-    Accessible by anyone (Read-Only).
+    ListView with filtering, searching, and ordering support.
+    - Filter by: title, author, publication_year
+    - Search in: title, author name
+    - Order by: title, publication_year
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.AllowAny]
+     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['title', 'author', 'publication_year']
+    search_fields = ['title', 'author__name']
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title']
 
 class BookDetailView(generics.RetrieveAPIView):
     """
@@ -58,4 +66,5 @@ class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
+
 
